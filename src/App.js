@@ -57,6 +57,10 @@ function App() {
                     <table className="response-table">
                         <tbody>
                             <tr>
+                                <td><strong>Success:</strong></td>
+                                <td>{responseData.is_success ? 'True' : 'False'}</td>
+                            </tr>
+                            <tr>
                                 <td><strong>User ID:</strong></td>
                                 <td>{responseData.user_id}</td>
                             </tr>
