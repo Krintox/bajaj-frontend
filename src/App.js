@@ -3,12 +3,14 @@ import React, { useState } from 'react';
 function App() {
     const [jsonInput, setJsonInput] = useState('');
     const [responseData, setResponseData] = useState(null);
+    const [getResponseData, setGetResponseData] = useState(null); // State for GET response
     const [selectedFilters, setSelectedFilters] = useState([]);
 
+    // Handle POST request
     const handleSubmit = async () => {
         try {
             const parsedData = JSON.parse(jsonInput);
-            const res = await fetch('https://bajaj-backend-i4qd.onrender.com/bfhl', {
+            const res = await fetch('https://bajaj-backend-gold.vercel.app/bfhl', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -19,6 +21,19 @@ function App() {
             setResponseData(data);
         } catch (error) {
             console.error('Invalid JSON');
+        }
+    };
+
+    // Handle GET request
+    const handleGetRequest = async () => {
+        try {
+            const res = await fetch('https://bajaj-backend-gold.vercel.app/bfhl', {
+                method: 'GET',
+            });
+            const data = await res.json();
+            setGetResponseData(data);
+        } catch (error) {
+            console.error('Error fetching GET response');
         }
     };
 
@@ -48,17 +63,27 @@ function App() {
                 onChange={(e) => setJsonInput(e.target.value)}
                 placeholder="Enter JSON"
             />
-            <button onClick={handleSubmit}>Submit</button>
+            <button onClick={handleSubmit}>Submit POST Request</button>
 
             {responseData && (
-                <select multiple onChange={(e) => handleFilterChange([...e.target.selectedOptions].map(opt => opt.value))}>
-                    <option value="Numbers">Numbers</option>
-                    <option value="Alphabets">Alphabets</option>
-                    <option value="Highest Lowercase Alphabet">Highest Lowercase Alphabet</option>
-                </select>
+                <>
+                    <select multiple onChange={(e) => handleFilterChange([...e.target.selectedOptions].map(opt => opt.value))}>
+                        <option value="Numbers">Numbers</option>
+                        <option value="Alphabets">Alphabets</option>
+                        <option value="Highest Lowercase Alphabet">Highest Lowercase Alphabet</option>
+                    </select>
+                    {renderResponse()}
+                </>
             )}
 
-            {renderResponse()}
+            <button onClick={handleGetRequest}>Click for GET Endpoint</button>
+
+            {getResponseData && (
+                <div>
+                    <h2>GET Response</h2>
+                    <p>Operation Code: {getResponseData.operation_code}</p>
+                </div>
+            )}
         </div>
     );
 }
