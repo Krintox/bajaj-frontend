@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
+import './App.css';  // Assuming you have App.css for styles
 
 function App() {
     const [jsonInput, setJsonInput] = useState('');
     const [responseData, setResponseData] = useState(null);
-    const [getResponseData, setGetResponseData] = useState(null); // State for GET response
-    const [selectedFilters, setSelectedFilters] = useState([]);
+    const [getResponseData, setGetResponseData] = useState(null);
 
     // Handle POST request
     const handleSubmit = async () => {
@@ -37,49 +37,58 @@ function App() {
         }
     };
 
-    const handleFilterChange = (selected) => {
-        setSelectedFilters(selected);
-    };
-
-    const renderResponse = () => {
-        if (!responseData) return null;
-        const { numbers, alphabets, highest_lowercase_alphabet } = responseData;
-
-        return (
-            <>
-                {selectedFilters.includes('Numbers') && <p>Numbers: {numbers.join(', ')}</p>}
-                {selectedFilters.includes('Alphabets') && <p>Alphabets: {alphabets.join(', ')}</p>}
-                {selectedFilters.includes('Highest Lowercase Alphabet') && <p>Highest Lowercase: {highest_lowercase_alphabet.join(', ')}</p>}
-            </>
-        );
-    };
-
     return (
-        <div>
-            <h1>{`21BDS0268`}</h1>
-            <input
-                type="text"
-                value={jsonInput}
-                onChange={(e) => setJsonInput(e.target.value)}
-                placeholder="Enter JSON"
-            />
-            <button onClick={handleSubmit}>Submit POST Request</button>
+        <div className="app-container">
+            <h1 className="title">{`21BDS0268`}</h1>
+            <div className="input-container">
+                <input
+                    className="input-box"
+                    type="text"
+                    value={jsonInput}
+                    onChange={(e) => setJsonInput(e.target.value)}
+                    placeholder="Enter JSON"
+                />
+                <button className="submit-btn" onClick={handleSubmit}>Submit POST Request</button>
+            </div>
 
             {responseData && (
-                <>
-                    <select multiple onChange={(e) => handleFilterChange([...e.target.selectedOptions].map(opt => opt.value))}>
-                        <option value="Numbers">Numbers</option>
-                        <option value="Alphabets">Alphabets</option>
-                        <option value="Highest Lowercase Alphabet">Highest Lowercase Alphabet</option>
-                    </select>
-                    {renderResponse()}
-                </>
+                <div className="table-container animate">
+                    <h2>POST Response</h2>
+                    <table className="response-table">
+                        <tbody>
+                            <tr>
+                                <td><strong>User ID:</strong></td>
+                                <td>{responseData.user_id}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Email:</strong></td>
+                                <td>{responseData.email}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Roll Number:</strong></td>
+                                <td>{responseData.roll_number}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Numbers:</strong></td>
+                                <td>{responseData.numbers.join(', ')}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Alphabets:</strong></td>
+                                <td>{responseData.alphabets.join(', ')}</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Highest Lowercase Alphabet:</strong></td>
+                                <td>{responseData.highest_lowercase_alphabet.join(', ')}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             )}
 
-            <button onClick={handleGetRequest}>Click for GET Endpoint</button>
+            <button className="get-btn" onClick={handleGetRequest}>Click for GET Endpoint</button>
 
             {getResponseData && (
-                <div>
+                <div className="get-response animate">
                     <h2>GET Response</h2>
                     <p>Operation Code: {getResponseData.operation_code}</p>
                 </div>
